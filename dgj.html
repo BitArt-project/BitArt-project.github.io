@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <style>
+    body {
+      margin: 0;
+      background-color: #000;
+      color: #fff;
+      font-family: Monospace;
+      font-size: 13px;
+      line-height: 24px;
+      overscroll-behavior: none;
+      cursor: crosshair;
+      overflow: hidden;
+    }
+
+    button {
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+
+    #muted {
+      position: absolute;
+      bottom: 2%;
+      left: 2%;
+      background-color: transparent;
+      border: none;
+      visibility: visible;
+    }
+
+    canvas {
+      display: block;
+      overflow: hidden;
+    }
+
+    .overlay-toolbar {
+      position: absolute;
+      bottom: 2%;
+      left: 50%;
+      transform: translate(-35%, 50%);
+      font-size: 0.6em;
+      font-weight: bold;
+      background-color: transparent;
+      border-radius: 5px;
+      visibility: visible;
+    }
+
+    .overlay-title {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      z-index: 1000;
+      background: transparent;
+      padding-top: 2px;
+    }
+  </style>
+  <title>BitArt Faces</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+</head>
+
+<body>
+  <button id="muted">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="red">
+      <path d="m616-320-56-56 104-104-104-104 56-56 104 104 104-104 56 56-104 104 104 104-56 56-104-104-104 104Zm-496-40v-240h160l200-200v640L280-360H120Zm280-246-86 86H200v80h114l86 86v-252ZM300-480Z" />
+    </svg>
+  </button>
+  <svg class="overlay-title" width="100%" height="15" xmlns="http://www.w3.org/2000/svg">
+    <text id="title-txt" x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="12" fill="#4aff5c">
+    </text>
+  </svg>
+  <svg class="overlay-toolbar" width="240" height="100" xmlns="http://www.w3.org/2000/svg">
+    <rect x="5" y="5" width="160" height="40" fill="transparent" stroke="transparent" stroke-width="1" rx="10" ry="10" />
+    <text id="toolbar-text" x="35%" y="25" text-anchor="middle" font-size="16" fill="#4aff5c" font-family="Arial" dy=".3em"></text>
+    <g id="forward" transform="translate(130, 25) scale(2)" style="cursor: pointer;">
+      <polygon points="-5,-5 1,0 -5,5" fill="#4aff5c" />
+      <polygon points="1,-5 7,0 1,5" fill="#4aff5c" />
+    </g>
+    <g id="back" transform="translate(40, 25) scale(2)" style="cursor: pointer;">
+      <polygon points="5,-5 -1,0 5,5" fill="#4aff5c" />
+      <polygon points="-1,-5 -7,0 -1,5" fill="#4aff5c" />
+    </g>
+  </svg>
+  <script type="module">
+    import * as THREE from "/content/0d013bb60fc5bf5a6c77da7371b07dc162ebc7d7f3af0ff3bd00ae5f0c546445i0";
+    import {
+      FirstPersonControls
+    } from "/content/cdfa84ad0c43f68756cda3c48b0d8ae536023403e604eb7d440441c3709903d3i0";
+    let seed = "";
+
+    function extractSeed() {
+      const e = new URLSearchParams(window.location.search);
+      seed = e.get("i");
+      console.log('Sd:', seed);
+    }
+    async function fetchChildren(e) {
+      try {
+        const t = await fetch(`/r/children/${e}/inscriptions`);
+        if (!t.ok) throw new Error(`Error fetching data for ID ${e}: ${t.statusText}`);
+        return (await t.json()).children || []
+      } catch (e) {
+        return []
+      }
+    }
+    async function getChildInscriptionIds(e, t) {
+      let n = await fetchChildren(e),
+        i = await fetchChildren(t);
+      n.sort(((e, t) => t.timestamp - e.timestamp)), i.sort(((e, t) => t.timestamp - e.timestamp));
+      let a = [...n, ...i].map((e => e.id)),
+        r = `/content/${a[0]}`,
+        s = await fetch(r),
+        o = (await s.json()).Playlist.exclude;
+      return o.length > 0 && (a = a.filter((e => !o.includes(e)))), a
+    }
+    extractSeed();
+    const inscriptionId1 = seed,
+      inscriptionId2 = "29b86b16186dc8459d473f6865b28aab985ea680d6851630e2b12827bf94c89bi0",
+      soundImg = '<svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 -960 960 960" width="36px" fill="#4aff5c"><path d="M640-440v-80h160v80H640Zm48 280-128-96 48-64 128 96-48 64Zm-80-480-48-64 128-96 48 64-128 96ZM120-360v-240h160l200-200v640L280-360H120Zm280-246-86 86H200v80h114l86 86v-252ZM300-480Z"/></svg>',
+      noSoundImg = '<svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 -960 960 960" width="36px" fill="red"><path d="m616-320-56-56 104-104-104-104 56-56 104 104 104-104 56 56-104 104 104 104-56 56-104-104-104 104Zm-496-40v-240h160l200-200v640L280-360H120Zm280-246-86 86H200v80h114l86 86v-252ZM300-480Z"/></svg>';
+    let camera, controls, scene, renderer, container, stats, frustum, frameTimer, SCREEN_WIDTH = window.innerWidth,
+      SCREEN_HEIGHT = window.innerHeight;
+    const NEAR = 10,
+      FAR = 3e3,
+      maxImageSize = 500,
+      minImageSize = 150,
+      txtImgSprites = [],
+      loader = new THREE.TextureLoader,
+      textStrings = [" "],
+      imageURLs = ["/content/87c1ac378acdff6fc9ce768e3d3471f24062ccac444ed4ec04f3fdf575dd65d2i0"],
+      soundURLs = [],
+      imgSprites = [],
+      txtSprites = [],
+      imgSpriteMaterials = [],
+      txtSpriteMaterials = [],
+      textCanvas = document.createElement("canvas"),
+      fileLoader = new THREE.FileLoader;
+    THREE.Cache.enabled = !0;
+    const soundEnabled = !1,
+      listener = new THREE.AudioListener,
+      sound = new THREE.Audio(listener),
+      audioLoader = new THREE.AudioLoader,
+      analyser = new THREE.AudioAnalyser(sound, 2048);
+    let sData;
+    const frequencyRange = {
+        bass: [20, 140],
+        lowMid: [140, 400],
+        mid: [400, 2600],
+        highMid: [2600, 5200],
+        treble: [5200, 14e3]
+      },
+      clock = new THREE.Clock;
+    let showHUD = !1;
+
+    function fadeInMaterial(e, t) {
+      let n = 0;
+      const i = 1 / (t / 10),
+        a = setInterval((() => {
+          n += i, e.opacity = n, n >= 1 && clearInterval(a)
+        }), 10)
+    }
+
+    function init() {
+      container = document.createElement("div"), document.body.appendChild(container), camera = new THREE.PerspectiveCamera(23, SCREEN_WIDTH / SCREEN_HEIGHT, 10, FAR), camera.position.set(700, 700, 1500), camera.add(listener), scene = new THREE.Scene, scene.background = new THREE.Color(0), scene.fog = new THREE.Fog(0, 1e3, FAR), createScene(), renderer = new THREE.WebGLRenderer({
+        antialias: !1
+      }), renderer.setPixelRatio(window.devicePixelRatio), renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT), container.appendChild(renderer.domElement), renderer.outputEncoding = THREE.sRGBEncoding, renderer.autoClear = !1, controls = new FirstPersonControls(camera, renderer.domElement), controls.lookSpeed = .0125, controls.movementSpeed = 500, controls.noFly = !1, controls.lookVertical = !0, controls.lookAt(scene.position), frustum = new THREE.Frustum, frameTimer = 0, window.addEventListener("resize", onWindowResize, !1), animate()
+    }
+
+    function onWindowResize() {
+      SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight, camera.aspect = SCREEN_WIDTH / SCREEN_HEIGHT, camera.updateProjectionMatrix(), renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT), controls.handleResize()
+    }
+
+    function displayCurrentIdx(e, t) {
+      0 == e && (e = t), document.getElementById("toolbar-text").textContent = e
+    }
+
+    function loadPlaylist(e) {
+      let t = "/content/" + e;
+      fileLoader.load(t, (function(e) {
+        const t = JSON.parse(e),
+          n = t.Playlist.title;
+        document.getElementById("title-txt").textContent = n;
+        const i = t.Playlist.txt;
+        textStrings.splice(0, textStrings.length);
+        for (let e = 0; e < i.length; e++) textStrings.push(i[e]);
+        const a = t.Playlist.img;
+        imageURLs.splice(0, imageURLs.length);
+        for (let e = 0; e < a.length; e++) imageURLs.push("/content/" + a[e]);
+        const r = t.Playlist.snd;
+        soundURLs.splice(0, soundURLs.length);
+        for (let e = 0; e < r.length; e++) soundURLs.push("/content/" + r[e])
+      }))
+    }
+
+    function fadeOut() {
+      const e = sound.getVolume() / 100;
+      let t = setInterval((() => {
+        const n = sound.getVolume() - e;
+        sound.setVolume(n), n <= 0 && (clearInterval(t), sound.stop())
+      }), 10)
+    }
+
+    function doSearch(e) {
+      const t = e.length;
+      let n = 0;
+      document.getElementById("forward").addEventListener("click", (() => {
+        n = (n + 1) % t, loadPlaylist(e[n]), fadeOut(), displayCurrentIdx(n, t)
+      })), document.getElementById("back").addEventListener("click", (() => {
+        n = (n - 1 + t) % t, loadPlaylist(e[n]), fadeOut(), displayCurrentIdx(n, t)
+      })), loadPlaylist(e[0]), init()
+    }
+
+    function createScene() {
+      loader.load(imageURLs[getRandomInt(imageURLs.length)], (function(t) {
+        e(t, t.image.width, t.image.height)
+      })), loader.load(imageURLs[getRandomInt(imageURLs.length)], (function(t) {
+        e(t, t.image.width, t.image.height)
+      })), loader.load(imageURLs[getRandomInt(imageURLs.length)], (function(t) {
+        e(t, t.image.width, t.image.height)
+      })), loader.load(imageURLs[getRandomInt(imageURLs.length)], (function(t) {
+        e(t, t.image.width, t.image.height)
+      }));
+      for (let e = 0; e < 4; e++) setTimeout((function() {
+        let e = getRandomInt(textStrings.length);
+        t(textStrings[e])
+      }), 300 * e);
+
+      function e(e, t, n) {
+        e.magFilter = THREE.NearestFilter, e.minFilter = THREE.NearestFilter, e.wrapS = THREE.RepeatWrapping, e.wrapT = THREE.RepeatWrapping;
+        const i = new THREE.SpriteMaterial({
+          map: e
+        });
+        imgSpriteMaterials.push(i),
+          function(e, t, n, i, a) {
+            e.speed = t, e.position.set(n, i, a), e.material.transparent = !0, scene.add(e), imgSprites.push(e), txtImgSprites.push(e)
+          }(new THREE.Sprite(i), 100 * Math.random(), 100 - 1e3 * Math.random(), 100 - 1e3 * Math.random(), 500 - 1e3 * Math.random())
+      }
+
+      function t(e) {
+        const t = createTextSpriteTexture(e),
+          n = new THREE.SpriteMaterial({
+            map: t
+          });
+        txtSpriteMaterials.push(n);
+        const i = new THREE.Sprite(n);
+        i.scale.set(t.image.width, t.image.height),
+          function(e, t, n, i, a) {
+            e.speed = t, e.position.set(n, i, a), e.material.transparent = !0, scene.add(e), txtSprites.push(e), txtImgSprites.push(e)
+          }(i, 100 * Math.random(), 100 - 1e3 * Math.random(), 100 - 1e3 * Math.random(), 500 - 1e3 * Math.random())
+      }
+      soundURLs.length > 0 && audioLoader.load(soundURLs[getRandomInt(soundURLs.length)], (function(e) {
+        sound.setBuffer(e), sound.setLoop(!1), sound.setVolume(.5), sound.play(), "suspended" === listener.context.state ? document.getElementById("muted").innerHTML = noSoundImg : document.getElementById("muted").innerHTML = soundImg
+      })), document.querySelector("#muted").addEventListener("click", (function() {
+        "running" === listener.context.state ? listener.context.suspend().then((() => {
+          document.getElementById("muted").innerHTML = noSoundImg
+        })) : "suspended" === listener.context.state && listener.context.resume().then((() => {
+          document.getElementById("muted").innerHTML = soundImg
+        }))
+      }))
+    }
+
+    function animate() {
+      requestAnimationFrame(animate), render()
+    }
+
+    function getRandomInt(e) {
+      return Math.floor(Math.random() * Math.floor(e))
+    }
+
+    function getRandInt(e, t) {
+      return Math.floor(Math.random() * (t - e + 1)) + e
+    }
+
+    function createTextSpriteTexture(e) {
+      const t = Math.ceil(30, .1),
+        n = textCanvas.getContext("2d");
+      n.font = "20px sans-serif";
+      const i = .1 * n.measureText(e).width + 28,
+        a = Math.ceil(i / .1);
+      textCanvas.width = a, textCanvas.height = t, n.textAlign = "center", n.textBaseline = "middle", n.fillStyle = "white", n.font = "20px sans-serif", n.fillText(e, a / 2, t / 2);
+      const r = new THREE.Texture(textCanvas);
+      return r.minFilter = THREE.LinearFilter, r.needsUpdate = !0, r
+    }
+
+    function checkIfInView() {
+      sound.isPlaying || soundURLs.length > 0 && audioLoader.load(soundURLs[getRandomInt(soundURLs.length)], (function(e) {
+        sound.setBuffer(e), sound.setLoop(!1), sound.setVolume(.5), sound.play(), "suspended" === listener.context.state ? document.getElementById("muted").innerHTML = noSoundImg : document.getElementById("muted").innerHTML = soundImg
+      })), frustum.setFromProjectionMatrix((new THREE.Matrix4).multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse));
+      for (let e = 0; e < imgSprites.length; e++) frustum.intersectsObject(imgSprites[e]) || imageURLs.length > 0 && loader.load(imageURLs[getRandomInt(imageURLs.length)], (function(t) {
+        if (t.image.width > 500 || t.image.height > 500) {
+          let n, i;
+          if (t.image.width > 500) {
+            n = 500;
+            let e = t.image.width / 500;
+            i = t.image.height / e
+          } else {
+            i = 500;
+            let e = t.image.height / 500;
+            n = t.image.width / e
+          }
+          imgSprites[e].scale.set(n, i)
+        } else if (t.image.width < 150 || t.image.height < 150) {
+          let n, i;
+          if (t.image.width < 150) {
+            n = 150;
+            let e = 150 / t.image.width;
+            i = t.image.height * e
+          } else {
+            i = 150;
+            let e = 150 / t.image.height;
+            n = t.image.width * e
+          }
+          imgSprites[e].scale.set(n, i), t.magFilter = THREE.NearestFilter, t.minFilter = THREE.NearestFilter
+        } else imgSprites[e].scale.set(t.image.width, t.image.height);
+        imgSpriteMaterials[e].transparent = !0, imgSpriteMaterials[e].opacity = 0, imgSpriteMaterials[e].map = t;
+        const n = new THREE.Vector3(0, 0, -getRandInt(1400, 1600));
+        n.applyMatrix4(camera.matrixWorld), imgSprites[e].position.set(n.x, n.y, n.z), fadeInMaterial(imgSpriteMaterials[e], 1e3)
+      }));
+      for (let e = 0; e < txtSprites.length; e++) setTimeout((function() {
+        if (frustum.intersectsObject(txtSprites[e]));
+        else {
+          let t = getRandomInt(textStrings.length);
+          const n = createTextSpriteTexture(textStrings[t]);
+          txtSprites[e].scale.set(n.image.width, n.image.height), txtSpriteMaterials[e].transparent = !0, txtSpriteMaterials[e].opacity = 0, txtSpriteMaterials[e].map = n;
+          const i = new THREE.Vector3(0, 0, -getRandInt(1300, 1400));
+          i.applyMatrix4(camera.matrixWorld), txtSprites[e].position.set(i.x, i.y, i.z), fadeInMaterial(txtSpriteMaterials[e], 1e3)
+        }
+      }), 300 * e)
+    }
+
+    function render() {
+      const e = clock.getDelta();
+      for (let t = 0; t < txtImgSprites.length; t++) {
+        const n = txtImgSprites[t];
+        n.position.x += n.speed * e, n.position.y += n.speed * e, n.position.z += n.speed * e
+      }
+      let t, n, i, a;
+      controls.update(e), ++frameTimer % 120 == 0 && checkIfInView(), sData = analyser.getFrequencyData(), "suspended" === listener.context.state ? (t = 1, n = 1, i = 1) : (t = getFrequencyRangeValue(sData, frequencyRange.bass), n = getFrequencyRangeValue(sData, frequencyRange.lowMid + .5), i = getFrequencyRangeValue(sData, frequencyRange.highMid), a = getFrequencyRangeValue(sData, frequencyRange.lowMid));
+      for (let e = 0; e < imgSpriteMaterials.length; e++) imgSpriteMaterials[e].color.setRGB(t, n, i), "suspended" === listener.context.state ? imgSpriteMaterials[e].map.offset.y = 0 : imgSpriteMaterials[e].map.offset.y = a / 4 - .19;
+      renderer.render(scene, camera)
+    }
+
+    function getAverage(e) {
+      return e.reduce(((e, t) => e + t), 0) / e.length
+    }
+
+    function getFrequencyRangeValue(e, t) {
+      const n = Math.round(t[0] / 24e3 * e.length),
+        i = Math.round(t[1] / 24e3 * e.length);
+      let a = 0,
+        r = 0;
+      for (let t = n; t <= i; t++) a += e[t], r += 1;
+      return a / r / 255
+    }
+    getChildInscriptionIds(inscriptionId1, inscriptionId2).then((e => {
+      doSearch(e), displayCurrentIdx(e.length)
+    })).catch((e => {}));
+  </script>
+</body>
+
+</html>

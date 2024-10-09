@@ -18,6 +18,20 @@
     </style>
 </head>
 <body>
-    <h1>This is Art</h1>
+    <iframe src="baf.html?i=123&u=1" width="400" height="400" style="border:none;"></iframe>
+    <button id="nextButton" style="position: absolute; bottom: 20px; right: 20px;">Next</button>
+
+    <script>
+        document.getElementById('nextButton').onclick = function() {
+            const iframe = document.querySelector('iframe');
+            const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+            const inputField = iframeDocument.querySelector('input');
+            if (inputField) {
+                const inputValue = inputField.value;
+                console.log(inputValue);
+                iframe.src = `baf.html?u=0&i=${encodeURIComponent(inputValue)}`;
+            }
+        };
+    </script>
 </body>
 </html>
