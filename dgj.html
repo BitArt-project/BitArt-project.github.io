@@ -83,41 +83,13 @@
     </g>
   </svg>
   <script type="module">
-    import * as THREE from "/content/0d013bb60fc5bf5a6c77da7371b07dc162ebc7d7f3af0ff3bd00ae5f0c546445i0";
+    import * as THREE from "https://ordinals.com/content/0d013bb60fc5bf5a6c77da7371b07dc162ebc7d7f3af0ff3bd00ae5f0c546445i0";
     import {
       FirstPersonControls
-    } from "/content/cdfa84ad0c43f68756cda3c48b0d8ae536023403e604eb7d440441c3709903d3i0";
-    let seed = "";
-
-    function extractSeed() {
-      const e = new URLSearchParams(window.location.search);
-      seed = e.get("i");
-      console.log('Sd:', seed);
-    }
-    async function fetchChildren(e) {
-      try {
-        const t = await fetch(`/r/children/${e}/inscriptions`);
-        if (!t.ok) throw new Error(`Error fetching data for ID ${e}: ${t.statusText}`);
-        return (await t.json()).children || []
-      } catch (e) {
-        return []
-      }
-    }
-    async function getChildInscriptionIds(e, t) {
-      let n = await fetchChildren(e),
-        i = await fetchChildren(t);
-      n.sort(((e, t) => t.timestamp - e.timestamp)), i.sort(((e, t) => t.timestamp - e.timestamp));
-      let a = [...n, ...i].map((e => e.id)),
-        r = `/content/${a[0]}`,
-        s = await fetch(r),
-        o = (await s.json()).Playlist.exclude;
-      return o.length > 0 && (a = a.filter((e => !o.includes(e)))), a
-    }
-    extractSeed();
-    const inscriptionId1 = seed,
-      inscriptionId2 = "29b86b16186dc8459d473f6865b28aab985ea680d6851630e2b12827bf94c89bi0",
-      soundImg = '<svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 -960 960 960" width="36px" fill="#4aff5c"><path d="M640-440v-80h160v80H640Zm48 280-128-96 48-64 128 96-48 64Zm-80-480-48-64 128-96 48 64-128 96ZM120-360v-240h160l200-200v640L280-360H120Zm280-246-86 86H200v80h114l86 86v-252ZM300-480Z"/></svg>',
-      noSoundImg = '<svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 -960 960 960" width="36px" fill="red"><path d="m616-320-56-56 104-104-104-104 56-56 104 104 104-104 56 56-104 104 104 104-56 56-104-104-104 104Zm-496-40v-240h160l200-200v640L280-360H120Zm280-246-86 86H200v80h114l86 86v-252ZM300-480Z"/></svg>';
+    } from "https://ordinals.com/content/cdfa84ad0c43f68756cda3c48b0d8ae536023403e604eb7d440441c3709903d3i0";
+    
+     const soundImg = '<svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 -960 960 960" width="36px" fill="#4aff5c"><path d="M640-440v-80h160v80H640Zm48 280-128-96 48-64 128 96-48 64Zm-80-480-48-64 128-96 48 64-128 96ZM120-360v-240h160l200-200v640L280-360H120Zm280-246-86 86H200v80h114l86 86v-252ZM300-480Z"/></svg>';
+     const noSoundImg = '<svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 -960 960 960" width="36px" fill="red"><path d="m616-320-56-56 104-104-104-104 56-56 104 104 104-104 56 56-104 104 104 104-56 56-104-104-104 104Zm-496-40v-240h160l200-200v640L280-360H120Zm280-246-86 86H200v80h114l86 86v-252ZM300-480Z"/></svg>';
     let camera, controls, scene, renderer, container, stats, frustum, frameTimer, SCREEN_WIDTH = window.innerWidth,
       SCREEN_HEIGHT = window.innerHeight;
     const NEAR = 10,
@@ -127,7 +99,7 @@
       txtImgSprites = [],
       loader = new THREE.TextureLoader,
       textStrings = [" "],
-      imageURLs = ["/content/87c1ac378acdff6fc9ce768e3d3471f24062ccac444ed4ec04f3fdf575dd65d2i0"],
+      imageURLs = ["https://ordinals.com/content/87c1ac378acdff6fc9ce768e3d3471f24062ccac444ed4ec04f3fdf575dd65d2i0"],
       soundURLs = [],
       imgSprites = [],
       txtSprites = [],
@@ -175,9 +147,7 @@
     }
 
     function loadPlaylist(e) {
-      let t = "/content/" + e;
-      fileLoader.load(t, (function(e) {
-        const t = JSON.parse(e),
+       const t = JSON.parse(e),
           n = t.Playlist.title;
         document.getElementById("title-txt").textContent = n;
         const i = t.Playlist.txt;
@@ -185,12 +155,11 @@
         for (let e = 0; e < i.length; e++) textStrings.push(i[e]);
         const a = t.Playlist.img;
         imageURLs.splice(0, imageURLs.length);
-        for (let e = 0; e < a.length; e++) imageURLs.push("/content/" + a[e]);
+        for (let e = 0; e < a.length; e++) imageURLs.push("https://ordinals.com/content/" + a[e]);
         const r = t.Playlist.snd;
         soundURLs.splice(0, soundURLs.length);
-        for (let e = 0; e < r.length; e++) soundURLs.push("/content/" + r[e])
-      }))
-    }
+        for (let e = 0; e < r.length; e++) soundURLs.push("https://ordinals.com/content/" + r[e])
+     }
 
     function fadeOut() {
       const e = sound.getVolume() / 100;
@@ -201,13 +170,14 @@
     }
 
     function doSearch(e) {
-      const t = e.length;
+      
+      const t = 1;
       let n = 0;
       document.getElementById("forward").addEventListener("click", (() => {
-        n = (n + 1) % t, loadPlaylist(e[n]), fadeOut(), displayCurrentIdx(n, t)
+        n = (n + 1) % t, loadPlaylist(e), fadeOut(), displayCurrentIdx(n, t)
       })), document.getElementById("back").addEventListener("click", (() => {
-        n = (n - 1 + t) % t, loadPlaylist(e[n]), fadeOut(), displayCurrentIdx(n, t)
-      })), loadPlaylist(e[0]), init()
+        n = (n - 1 + t) % t, loadPlaylist(e), fadeOut(), displayCurrentIdx(n, t)
+      })), loadPlaylist(e)
     }
 
     function createScene() {
@@ -352,9 +322,15 @@
       for (let t = n; t <= i; t++) a += e[t], r += 1;
       return a / r / 255
     }
-    getChildInscriptionIds(inscriptionId1, inscriptionId2).then((e => {
-      doSearch(e), displayCurrentIdx(e.length)
-    })).catch((e => {}));
+      //displayCurrentIdx(1, 1);
+      init();
+
+    window.addEventListener("message", (event) => {
+    
+    if (event.data && event.data.type === "messageFromParent") {
+        doSearch(event.data.payload);
+         }
+});
   </script>
 </body>
 

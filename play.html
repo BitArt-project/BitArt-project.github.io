@@ -1,43 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="baf.css" />
+    <title>BitArt Faces</title>
+  </head>
 
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="baf.css">
-  <script>
-    var nm = "185608";
-  </script>
-  <script src="baf.js"></script>
-  <title>BitArt Faces</title>
-</head>
-
-<body>
-  <div class="flip-box">
-    <div class="flip-box-inner">
-      <div class="flip-box-front">
-        <iframe id="bafc" title="BitArt Faces front"></iframe>
-        <button class="overlay" type="button" onclick="rotateDiv()">
-          <img src="play.svg" alt="flip" width="36" height="36">
-        </button>
-        <svg class="overlay-text" xmlns="http://www.w3.org/2000/svg" width="60" height="60">
-        </svg>
-      </div>
-      <div class="flip-box-back">
-        <iframe id="dgjs" title="BitArt Faces back"></iframe>
-        <button class="overlay" type="button" onclick="rotateDiv()">
-          <img src="stop.svg" alt="flip" width="36" height="36">
-        </button>
+  <body>
+    <div class="flip-box">
+      <div class="flip-box-inner">
+        <div class="flip-box-front">
+          <iframe id="bafc" title="BitArt Faces front"></iframe>
+          <button class="overlay" type="button" onclick="rotateDiv()">
+            <img src="play.svg" alt="flip" width="36" height="36" />
+          </button>
+          <svg
+            class="overlay-text"
+            xmlns="http://www.w3.org/2000/svg"
+            width="60"
+            height="60"
+          ></svg>
+        </div>
+        <div class="flip-box-back">
+          <iframe src="dgj.html" id="dgjs" title="BitArt Faces back"></iframe>
+          <button class="overlay" type="button" onclick="rotateDiv()">
+            <img src="stop.svg" alt="flip" width="36" height="36" />
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-  <script>
-    let isFlipped = !1;
+    <script>
+      let isFlipped = !1;
 
-    function rotateDiv() {
-      let e = document.querySelector(".flip-box-inner");
-      isFlipped ? (e.style.transform = "rotateY(0deg)", isFlipped = !1) : (e.style.transform = "rotateY(180deg)", isFlipped = !0)
-    }
-  </script>
-</body>
+      function rotateDiv() {
+        let e = document.querySelector(".flip-box-inner");
+        isFlipped
+          ? ((e.style.transform = "rotateY(0deg)"), (isFlipped = !1))
+          : ((e.style.transform = "rotateY(180deg)"), (isFlipped = !0));
+      }
+      function updateIframeSrc() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const iParam = urlParams.get("i");
+        if (iParam) {
+          const iframe = document.getElementById("bafc");
+          if (iframe) {
+            iframe.src = `baf.html?u=0&i=${iParam}`;
+          }
+        }
+      }
 
+      updateIframeSrc();
+    </script>
+  </body>
 </html>
