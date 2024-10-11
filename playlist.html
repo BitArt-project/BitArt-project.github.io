@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bitart Faces</title>
+  <style>
+    body {
+      background-color: rgb(33, 33, 33);
+      color: lightgray;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    .navbar {
+      background-color: #333;
+      color: lightgray;
+      padding: 15px;
+      text-align: center;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 60px; /* Adjust based on navbar height */
+    }
+    .left-column, .right-column {
+      padding: 15px;
+      box-sizing: border-box;
+    }
+    .left-column {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      min-width: 300px;
+    }
+    .right-column {
+      flex: 1;
+      min-width: 300px;
+    }
+    iframe {
+      width: 600px;
+      height: 600px;
+      border: none;
+    }
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+    }
+    @media (max-width: 600px) {
+      .container {
+        flex-direction: column;
+      }
+      iframe {
+        width: 100%;
+        height: auto;
+      }
+    }
+
+    #sbmBtn, #genPlBtn, #backButton, #fullScrBtn {
+        padding: 5px 10px;
+        background-color: rgb(33, 33, 33);
+        color: white;
+        border: 1px solid white;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 5px;
+      }
+      .btnRow {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      #genPl {
+        margin-left: auto;
+      }
+      #genPlBtn {
+        margin-right: 5px;
+        visibility: hidden;
+      }
+      #backButton, #fullScrBtn {
+        margin-right: 5px;
+      }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    DᴳᴱᴺJ and Playlist Generator by BitArt
+  </div>
+  <div class="container">
+    <div class="left-column">
+      <iframe id="topFr" src="play.html" title="BitArt Faces"></iframe>
+    </div>
+    <div class="right-column">
+      <div id="cpDiv">
+        <p>1. Click the Play Button to start.</p>
+        <p>2. Add Sound and Image Inscriptions, separating each with a line break.</p>
+        <p>3. Enter Text—one entry per line.</p>
+        <p>4. Click "Load Playlist" to display your playlist.</p>
+      </div>
+      <div id="inpt">
+        <div>
+          <p>Sounds</p>
+          <textarea id="textArea3" rows="4"></textarea>
+        </div>
+        <div>
+          <p>Images</p>
+          <textarea id="textArea2" rows="4"></textarea>
+        </div>
+        <div>
+          <p>Text</p>
+          <textarea id="textArea1" rows="4"></textarea>
+          <div class="btnRow">
+            <button id="backButton" type="button" onclick="window.history.back()">Back</button>
+        <button id="fullScrBtn" type="button" onclick="document.querySelector('iframe').requestFullscreen()">Full Screen</button>
+            <div id="genPl">
+              <button id="genPlBtn" type="button" onclick="showPlaylistOverlay()">
+                Copy Playlist
+              </button>
+            </div>
+            <div id="sbm"></div>
+            <button id="sbmBtn" type="button" onclick="handleButtonClick('textArea3')">
+              Load Playlist
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const iParam = urlParams.get('i');
+    const iframeSrc = `play.html?u=0&i=${iParam}`;
+    document.querySelector('iframe').src = iframeSrc;
+
+    function showPlaylistOverlay() {
+        const overlay = document.createElement("div");
+        overlay.style.position = "fixed";
+        overlay.style.top = "0";
+        overlay.style.left = "0";
+        overlay.style.width = "100%";
+        overlay.style.height = "100%";
+        overlay.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+        overlay.style.display = "flex";
+        overlay.style.justifyContent = "center";
+        overlay.style.alignItems = "center";
+        overlay.style.zIndex = "1000";
+
+        const innerDiv = document.createElement("div");
+        innerDiv.style.backgroundColor = "white";
+        innerDiv.style.padding = "20px";
+        innerDiv.style.borderRadius = "5px";
+        innerDiv.style.width = "80%";
+        innerDiv.style.maxWidth = "600px";
+
+        const textarea = document.createElement("textarea");
+        textarea.style.width = "100%";
+        textarea.style.height = "300px";
+        textarea.value = playlist;
+
+        const closeButton = document.createElement("button");
+        closeButton.innerText = "Close";
+        closeButton.style.marginTop = "10px";
+        closeButton.onclick = function () {
+          document.body.removeChild(overlay);
+        };
+
+        innerDiv.appendChild(textarea);
+        innerDiv.appendChild(closeButton);
+
+        overlay.appendChild(innerDiv);
+
+        const copyButton = document.createElement("button");
+        copyButton.innerText = "Copy";
+        copyButton.style.marginTop = "10px";
+        copyButton.style.marginLeft = "10px";
+        copyButton.onclick = function () {
+          textarea.select();
+          document.execCommand("copy");
+        };
+        innerDiv.appendChild(copyButton);
+        document.body.appendChild(overlay);
+      }
+
+      function handleButtonClick() {
+        const lineBreakRegex = /\n+/;
+        const textArea1 = document
+          .getElementById("textArea1")
+          .value.split(/\n+/);
+        const textArea2 = document
+          .getElementById("textArea2")
+          .value.split(/[\s,]+/);
+        const textArea3 = document
+          .getElementById("textArea3")
+          .value.split(/[\s,]+/);
+
+        const jsonData = {
+          Playlist: {
+            version: "1.0",
+            title: "",
+            description: "",
+            exclude: [],
+            txt: textArea1,
+            img: textArea2,
+            snd: textArea3,
+          },
+        };
+
+        playlist = JSON.stringify(jsonData, null, 2);
+
+        document.getElementById("genPlBtn").style.visibility = "visible";
+        document.getElementById("sbmBtn").style.backgroundColor =
+          "rgb(33, 33, 33)";
+        document.getElementById("sbmBtn").style.color = "white";
+        document.getElementById("sbmBtn").style.fontWeight = "normal";
+
+        sendMessageToGrandchild(playlist);
+      }
+
+      function sendMessageToGrandchild(message) {
+        const childIframe = document.getElementById("topFr");
+
+        if (childIframe && childIframe.contentWindow) {
+          const grandchildIframe =
+            childIframe.contentWindow.document.getElementById("dgjs");
+
+          if (grandchildIframe && grandchildIframe.contentWindow) {
+            grandchildIframe.contentWindow.postMessage(
+              {
+                type: "messageFromParent",
+                payload: message,
+              },
+              "*"
+            );
+          } else {
+            console.error("Grandchild iframe not found or not loaded");
+          }
+        } else {
+          console.error("Child iframe not found or not loaded");
+        }
+      }
+
+      function trackTextAreaChanges() {
+        const textArea1 = document.getElementById("textArea1");
+        const textArea2 = document.getElementById("textArea2");
+        const textArea3 = document.getElementById("textArea3");
+
+        textArea1.addEventListener("input", () => {
+          document.getElementById("genPlBtn").style.visibility = "hidden";
+          document.getElementById("sbmBtn").style.backgroundColor = "#5f6";
+          document.getElementById("sbmBtn").style.color = "black";
+          document.getElementById("sbmBtn").style.fontWeight = "bold";
+        });
+
+        textArea2.addEventListener("input", () => {
+          document.getElementById("genPlBtn").style.visibility = "hidden";
+          document.getElementById("sbmBtn").style.backgroundColor = "#5f6";
+          document.getElementById("sbmBtn").style.color = "black";
+          document.getElementById("sbmBtn").style.fontWeight = "bold";
+        });
+
+        textArea3.addEventListener("input", () => {
+          document.getElementById("genPlBtn").style.visibility = "hidden";
+          document.getElementById("sbmBtn").style.backgroundColor = "#5f6";
+          document.getElementById("sbmBtn").style.color = "black";
+          document.getElementById("sbmBtn").style.fontWeight = "bold";
+        });
+      }
+      trackTextAreaChanges();
+  </script>
+</body>
+</html>
