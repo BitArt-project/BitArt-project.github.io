@@ -81,7 +81,6 @@
       }
       #genPlBtn {
         margin-right: 5px;
-        visibility: hidden;
       }
       #backButton, #fullScrBtn {
         margin-right: 5px;
@@ -98,11 +97,12 @@
     </div>
     <div class="right-column">
       <div id="cpDiv">
-        <p>1. Click the play Button to start.</p>
-        <p>2. Add sound inscription IDs, separating each with a line break.</p>
-        <p>3. Add image Inscription IDs, separating each with a line break.</p>
-        <p>4. Enter Text—one entry per line.</p>
+        <p>1. Click the play button to start.</p>
+        <p>2. Add sound inscription IDs—separate each with a line break.</p>
+        <p>3. Add image Inscription IDs—separate each with a line break.</p>
+        <p>4. Enter text, with one entry per line.</p>
         <p>5. Click "Load Playlist" to display your playlist.</p>
+        <p>6. Click "Copy Playlist" and save it as a .json file.</p>
       </div>
       <div id="inpt">
         <div>
@@ -117,7 +117,9 @@
           <p>Text</p>
           <textarea id="textArea1" rows="4"></textarea>
           <div class="btnRow">
+            <!--
             <button id="backButton" type="button" onclick="window.history.back()">Back</button>
+            -->
         <button id="fullScrBtn" type="button" onclick="document.querySelector('iframe').requestFullscreen()">Full Screen</button>
             <div id="genPl">
               <button id="genPlBtn" type="button" onclick="showPlaylistOverlay()">
