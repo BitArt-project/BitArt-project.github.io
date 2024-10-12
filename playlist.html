@@ -142,6 +142,7 @@
     document.querySelector('iframe').src = iframeSrc;
 
     function showPlaylistOverlay() {
+      hasUnsavedChanges = false;
         const overlay = document.createElement("div");
         overlay.style.position = "fixed";
         overlay.style.top = "0";
@@ -247,6 +248,7 @@
           console.error("Child iframe not found or not loaded");
         }
       }
+      let hasUnsavedChanges = false;
 
       function trackTextAreaChanges() {
         const textArea1 = document.getElementById("textArea1");
@@ -254,6 +256,7 @@
         const textArea3 = document.getElementById("textArea3");
 
         textArea1.addEventListener("input", () => {
+          hasUnsavedChanges = true;
           document.getElementById("genPlBtn").style.visibility = "hidden";
           document.getElementById("sbmBtn").style.backgroundColor = "rgb(47, 255, 0)";
           document.getElementById("sbmBtn").style.color = "black";
@@ -261,6 +264,7 @@
         });
 
         textArea2.addEventListener("input", () => {
+          hasUnsavedChanges = true;
           document.getElementById("genPlBtn").style.visibility = "hidden";
           document.getElementById("sbmBtn").style.backgroundColor = "rgb(47, 255, 0)";
           document.getElementById("sbmBtn").style.color = "black";
@@ -268,6 +272,7 @@
         });
 
         textArea3.addEventListener("input", () => {
+          hasUnsavedChanges = true;
           document.getElementById("genPlBtn").style.visibility = "hidden";
           document.getElementById("sbmBtn").style.backgroundColor = "rgb(47, 255, 0)";
           document.getElementById("sbmBtn").style.color = "black";
@@ -275,6 +280,14 @@
         });
       }
       trackTextAreaChanges();
+
+        window.addEventListener("beforeunload", function (e) {
+          if (hasUnsavedChanges) {
+            const confirmationMessage = "You have unsaved changes to your playlist. Are you sure you want to leave?";
+            e.returnValue = confirmationMessage;
+            return confirmationMessage;
+          }
+        });
   </script>
 </body>
 </html>
