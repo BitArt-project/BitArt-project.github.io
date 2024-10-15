@@ -185,6 +185,9 @@
             document.getElementById('textArea1').value = jsonData.Playlist.txt.join('\n');
             document.getElementById('textArea2').value = jsonData.Playlist.img.join('\n');
             document.getElementById('textArea3').value = jsonData.Playlist.snd.join('\n');
+            document.getElementById("genPlBtn").style.visibility = "hidden";
+            document.getElementById("sbmBtn").style.backgroundColor = "rgb(47, 255, 0)";
+            document.getElementById("sbmBtn").style.color = "black";
           };
           reader.readAsText(file);
         }
