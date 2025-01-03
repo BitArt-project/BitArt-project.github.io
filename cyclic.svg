@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMinYMin meet" viewBox="0 0 350 350">
+  <style type="text/css">
+    .gd1 { fill: url(#sunGlow); filter: url(#sunBlur); } 
+    .gd2 { fill: url(#skyGradient); } .stars { fill: #ffffff; }
+  </style>
+  <defs>
+    <filter id="sunBlur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="5" /></filter>
+    <filter id="twinkle" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="0.8" /></filter>
+    <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color: #fff5a6; stop-opacity: 1"><animate attributeName="stop-color" values="#fff5a6;#ffd700;#fff5a6" dur="3s" repeatCount="indefinite"/></stop>
+      <stop offset="40%" style="stop-color: #ffd700; stop-opacity: 0.8"><animate attributeName="stop-color" values="#ffd700;#ff8c00;#ffd700" dur="3s" repeatCount="indefinite"/></stop>
+      <stop offset="100%" style="stop-color: #ff8c00; stop-opacity: 0" />
+    </radialGradient>
+    <linearGradient id="skyGradient" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="260">
+      <stop offset="0"><animate attributeName="stop-color" values="#ff7e00;#87ceeb;#1a2634;#1a2634;#ff7e00" dur="40s" repeatCount="indefinite" /></stop>
+      <stop offset="0.4"><animate attributeName="stop-color" values="#ff9933;#b7e4f7;#2c3e50;#2c3e50;#ff9933" dur="40s" repeatCount="indefinite" /></stop>
+      <stop offset="1"><animate attributeName="stop-color" values="#ff6b6b;#ffffff;#3a4b5c;#3a4b5c;#ff6b6b" dur="40s" repeatCount="indefinite" />
+      <animate attributeName="stop-opacity" values="0;0.3;0.1;0.1;0" dur="40s" repeatCount="indefinite" /></stop>
+    </linearGradient>
+    <clipPath id="lsm"><path d="M350,255.3c-3.6-0.6-9.1-1.7-15.7-3.7c-24.2-7.2-28.9-16.1-42.3-21c-26.7-9.8-39.8,13.3-94.3,12.2 c-8.3-0.2-7.2-0.7-17.7-0.9c-34-0.8-59.1,4.3-67,5.7c-20.4,3.8-54.3,7.3-113,5c0-44.9,0-89.7,0-134.6C0,78.5,0,39,0-0.6 c116.7,0,233.3,0,350,0c0,42.7,0,85.4,0,128.1C350,170.1,350,212.7,350,255.3z"/></clipPath>
+  </defs>
+  <rect width="100%" height="100%" fill="#2c3e50"><animate attributeName="fill" values="#2c3e50;#87ceeb;#1a2634;#1a2634;#2c3e50" dur="40s" repeatCount="indefinite" /></rect>
+  <g clip-path="url(#lsm)">
+    <path d="M-51.5,306.5c58.4-30.4,137.3-79.3,216.5-156C244.6,73.4,296.3-4.4,328.5-62" fill="none" id="ap1"/>
+    <circle cx="" cy="" r="55" class="gd1">
+      <animateMotion dur="40s" repeatCount="indefinite">
+        <mpath href="#ap1" />
+      </animateMotion>
+      <animate attributeName="r" values="55;58;55" dur="4s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="" cy="" r="65" class="gd1" style="opacity: 0.3">
+      <animateMotion dur="40s" repeatCount="indefinite">
+        <mpath href="#ap1" />
+      </animateMotion>
+      <animate attributeName="r" values="65;72;65" dur="4s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values="0.3;0.4;0.3" dur="4s" repeatCount="indefinite" />
+    </circle>
+    <path class="gd2" d="M350,255.3c-3.6-0.6-9.1-1.7-15.7-3.7c-24.2-7.2-28.9-16.1-42.3-21c-26.7-9.8-39.8,13.3-94.3,12.2 c-8.3-0.2-7.2-0.7-17.7-0.9c-34-0.8-59.1,4.3-67,5.7c-20.4,3.8-54.3,7.3-113,5c0-44.9,0-89.7,0-134.6C0,78.5,0,39,0-0.6 c116.7,0,233.3,0,350,0c0,42.7,0,85.4,0,128.1C350,170.1,350,212.7,350,255.3z">
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="40s" repeatCount="indefinite" />
+    </path>
+  </g>
+</svg>
