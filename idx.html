@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Rhythm &amp; Hash by BitArt</title>
+    <script src="https://ordinals.com/content/c39de9dcaa1a9ba756e14fad9460b9bb18de3a5447fe018bae02a7515ee37c65i0"></script>
+    <script src="https://ordinals.com/content/44fbcec24e9a0bc7cb4ab53b780f5066664828a4380f23856c3fbed476cab484i0"></script>
+    <style>
+        body {
+            background: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100vh;
+        }
+        #artwork-container {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 0;
+            box-shadow: none;
+        }
+        path, line {
+            opacity: 1;
+            transition: stroke-dashoffset 0.5s ease-in-out;
+        }
+        #artwork-container svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="artwork-container"></div>
+    <script src="autonomous-artist.js"></script>
+</body>
+</html> 

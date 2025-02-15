@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rhythm &amp; Hash by BitArt</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+            overflow: hidden;
+        }
+
+        .frame-container {
+            position: relative;
+            width: 100vh;
+            height: 100vh;
+            max-width: 100vw;
+            max-height: 100vw;
+        }
+
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+        }
+
+        @media (orientation: portrait) {
+            .frame-container {
+                width: 100vw;
+                height: 100vw;
+            }
+        }
+
+        @media (orientation: landscape) {
+            .frame-container {
+                width: 100vh;
+                height: 100vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="frame-container">
+        <iframe src="idx.html" title="Autonomous Artist"></iframe>
+    </div>
+</body>
+</html> 
