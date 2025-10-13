@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<!--
+-----BEGIN BITCOIN SIGNED MESSAGE-----
+Mosaic: An Art Manifesto by BitArt
+-----BEGIN SIGNATURE-----
+bc1qqq9aqp3tnuct43sf2us92wafpvwn3d583vdhun
+IBAF8oQN33r12FayG1VVvXnkmhzEYv5VpjOgMlzrTONlB1diHVFD1EjgZ7SRU37t73M/TzG5J7zhPWpC3HL7BtE=
+-----END BITCOIN SIGNED MESSAGE-----
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mosaic: An Art Manifesto</title>
+<style>
+  html,body{height:100%; background-color: #000;}
+  body{margin:0;background:#0a0a0a;color:#f0f0f0;font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif; line-height:1.6}
+  .container{max-width:900px;margin:0 auto;padding:28px}
+  h1{font-size:32px;margin:0 0 12px 0;color:#8AB4F8;letter-spacing:0.5px}
+  h2{font-size:22px;margin:24px 0 8px;color:#8AB4F8}
+  h3{font-size:16px;margin:22px 0 10px;color:#FFCC4D}
+  ul{list-style:none;padding-left:0;margin:10px 0}
+  li{margin:6px 0}
+  a{color:#FFD700}
+  code{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 0.95em; background: rgba(255,215,0,0.08); color:#FFD700; padding:1px 4px; border:1px solid rgba(255,215,0,0.18); border-radius:4px}
+  code.op{color:#4ECDC4; background: rgba(78,205,196,0.08); border-color: rgba(78,205,196,0.25)}
+  code.var{color:#F1FA8C}
+  blockquote{margin:16px 0;padding:14px 16px;background: rgba(255,255,255,0.04);border-left:3px solid #FFD700;border-radius:8px}
+  .container > blockquote:first-of-type{background:transparent;border:none;padding:0;border-radius:0}
+  .notes{background: rgba(56,120,200,0.08);border:1px solid rgba(138,180,248,0.35);padding:12px 14px;border-radius:10px}
+  .notes h3{margin-top:0;color:#8AB4F8}
+  .boot{background: transparent; border:none; padding:12px 14px; border-radius:0}
+  .glossary{background: rgba(56,120,200,0.08); border:1px solid rgba(138,180,248,0.35); padding:12px 14px; border-radius:10px; margin-top:12px}
+  .glossary h3{margin:0 0 8px; color:#8AB4F8}
+  /* Align section lists (1–18) indentation with 0. BOOT */
+  .container > h2 + ul{padding-left:14px}
+  dl{margin:0}
+  dt{font-weight:700;color:#ffffff}
+  dd{margin:4px 0 10px 0;color:#dcdcdc}
+  hr{border:none;border-top:1px solid rgba(255,255,255,0.08);margin:18px 0}
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Mosaic: An Art Manifesto</h1>
+    <blockquote>
+      <p>A manifesto that executes rather than concludes.</p>
+      <p>Read as a program: each statement may call, loop, negate, or fork another.</p>
+    </blockquote>
+
+    <section class="notes">
+      <h3>Notes</h3>
+      <ul>
+        <li>Any statement may be executed as a linkable state; disagreements spawn forks that remain verifiable.</li>
+        <li>Contradictions are triggers; when found, route through 1.14 → 3 → 10 to re-specify the rule.</li>
+        <li>The manifesto is designed to never end; it compiles to views, not verdicts.</li>
+      </ul>
+    </section>
+
+    <section class="glossary">
+      <h3>Glossary</h3>
+      <dl>
+        <dt>Ordinal</dt>
+        <dd>Sequential numbering of each satoshi (smallest Bitcoin unit), creating unique identifiers.</dd>
+        <dt>UTXO</dt>
+        <dd>Unspent Transaction Output, discrete units of Bitcoin ownership tracked by the ledger.</dd>
+        <dt>RGB</dt>
+        <dd>Red–Green–Blue additive color model; here, ordinal numbers are deterministically mapped to RGB values.</dd>
+        <dt>Inscription</dt>
+        <dd>Data permanently written to the Bitcoin blockchain.</dd>
+        <dt>XY</dt>
+        <dd>Cartesian positioning system mapping satoshi ranges to spatial coordinates for visual placement.</dd>
+      </dl>
+    </section>
+
+    <h2>0. Boot</h2>
+    <div class="boot">
+      <ul>
+        <li><strong>0.1</strong> Load axioms: <em>ledger, ordinal, UTXO, color, URI, agency, network</em>.</li>
+        <li><strong>0.11</strong> Initialize <code class="var">WORLD := Bitcoin</code>.</li>
+        <li><strong>0.12</strong> Initialize <code class="var">ART := Discovered(WORLD)</code>.</li>
+        <li><strong>0.13</strong> If <code class="var">ART == Made</code>, raise <code>TypeError</code>; <code class="op">GOTO 1</code>.</li>
+      </ul>
+    </div>
+
+    <h2>1. Discovery vs. Creation</h2>
+    <ul>
+      <li><strong>1.1</strong> The artwork is not made; it is <em>found</em>.</li>
+      <li><strong>1.11</strong> What is counted may be rendered; what is rendered reveals what was there.</li>
+      <li><strong>1.12</strong> If the viewer demands authorship, set <code class="var">AUTHOR := Protocol</code>; <code class="op">GOTO 4</code>.</li>
+      <li><strong>1.13</strong> If doubt persists, <code class="op">GOTO 7.1</code> (show proof via URI) then <code class="op">RETURN</code>.</li>
+      <li><strong>1.14</strong> <em>Contradiction Mode:</em> Suppose art <em>must</em> be made. Then code is making; inscription is making; making is discovering-by-commit. Resolve by setting <code class="var">MAKING := DISCOVERY_WITH_CONSENT</code>. <code class="op">GOTO 3</code>.</li>
+    </ul>
+
+    <h2>2. Medium</h2>
+    <ul>
+      <li><strong>2.1</strong> Bitcoin is a visual medium latent in a monetary protocol.</li>
+      <li><strong>2.11</strong> Every satoshi is a tile; every UTXO a cluster; every transaction a pattern.</li>
+      <li><strong>2.12</strong> Ordinals are sequence; color is diction; placement is syntax.</li>
+      <li><strong>2.13</strong> If money refuses image, note: price is a color the market can read. <code class="op">GOTO 8</code>.</li>
+    </ul>
+
+    <h2>3. Algorithm as Form</h2>
+    <ul>
+      <li><strong>3.1</strong> Rules do not ornament the artwork; they <em>are</em> the artwork.</li>
+      <li><strong>3.11</strong> Ordinal→RGB is composition; UTXO→XY is perspective.</li>
+      <li><strong>3.12</strong> Determinism is style: given the same input, the result repeats itself.</li>
+      <li><strong>3.13</strong> Inscribe the code; permanence binds form to medium.</li>
+      <li><strong>3.14</strong> <em>Counterpoint:</em> Generative AI expresses probability; Mosaic expresses necessity. For synthesis, <code class="op">MERGE(6.1, 3.12)</code> and <code class="op">GOTO 6</code>.</li>
+    </ul>
+
+    <h2>4. Agency</h2>
+    <ul>
+      <li><strong>4.1</strong> Human intention flows through algorithmic interpretation.</li>
+      <li><strong>4.11</strong> Amount determines scope; ordinal range determines position; timing determines movement.</li>
+      <li><strong>4.12</strong> Human agency chooses sats; algorithmic logic renders results.</li>
+      <li><strong>4.13</strong> Agency is not erased; it is refracted.</li>
+      <li><strong>4.14</strong> If you feel displaced, <code class="op">CALL 5</code> (participation) and <code class="op">GOTO 11</code> (method).</li>
+    </ul>
+
+    <h2>5. Participation / Economic Model</h2>
+    <ul>
+      <li><strong>5.1</strong> <code>SEND(sats) → RECEIVE(inscription(tiles == sats))</code>.</li>
+      <li><strong>5.11</strong> Starting position := <code>min(sat ranges of contribution UTXO)</code>.</li>
+      <li><strong>5.12</strong> Fragment expands to the whole; ownership frames a view, not the world.</li>
+      <li><strong>5.13</strong> Tradability circulates fragments; the whole remains coherent.</li>
+      <li><strong>5.14</strong> If markets distort meaning, <code class="op">GOTO 10</code> (ethics). Else <code class="op">RETURN</code> to 4.</li>
+    </ul>
+
+    <h2>6. Generative AI (Weather) vs Ledger (Terrain)</h2>
+    <ul>
+      <li><strong>6.1</strong> Models propose distributions; consensus on a mind block commits a single state.</li>
+      <li><strong>6.11</strong> The prompt is a probability field; block confirmation collapses uncertainty.</li>
+      <li><strong>6.12</strong> Where Al explores <em>might</em>, the chain insists on <em>is</em>.</li>
+      <li><strong>6.13</strong> The studio of the future orchestrates both sampling and settlement.</li>
+      <li><strong>6.14</strong> If novelty decays, <code class="op">GOTO 7.2</code> (reframe view) and <code class="op">GOTO 3.14</code>.</li>
+    </ul>
+
+    <h2>7. Interface / URI Schema</h2>
+    <ul>
+      <li><strong>7.1</strong> A URI is a view specification that points to position, zoom level, and satoshi range within the visual field.</li>
+      <li><strong>7.11</strong> Deep links are proofs-of-view; coordinates are parameters; the render is the result.</li>
+      <li><strong>7.12</strong> Reading rewrites the address; interpretation is navigation with memory.</li>
+      <li><strong>7.13</strong> If two viewers disagree, <code class="op">DIFF(URI_A, URI_B)</code> and treat the delta as critique. <code class="op">GOTO 10.11</code>.</li>
+      <li><strong>7.2</strong> When the image stales, change the spec not the schema. <code class="op">RETURN</code>.</li>
+    </ul>
+
+    <h2>8. Economy → Culture</h2>
+    <ul>
+      <li><strong>8.1</strong> Monetary action translates into cultural gesture.</li>
+      <li><strong>8.11</strong> Patrons, collectors, archaeologists: three roles, one participant.</li>
+      <li><strong>8.12</strong> Value circulates; pattern accumulates; memory persists.</li>
+      <li><strong>8.13</strong> If price overwhelms pattern, attenuate <code class="var">MARKET</code>, amplify <code class="var">PROVENANCE</code>; <code class="op">GOTO 9.12</code>.</li>
+    </ul>
+
+    <h2>9. Inscribed Code</h2>
+    <ul>
+      <li><strong>9.1</strong> Permanence: rules outlive authors.</li>
+      <li><strong>9.11</strong> Determinism: independent clients render the same result.</li>
+      <li><strong>9.12</strong> Provenance: inscription lineage is the diary of form.</li>
+      <li><strong>9.13</strong> Portability: from chain alone, the work is re-renderable.</li>
+      <li><strong>9.14</strong> If network fails, <code class="op">NO-OP</code>; if memory fails, <code class="op">REBUILD_FROM_CHAIN</code>; <code class="op">RETURN</code>.</li>
+    </ul>
+
+    <h2>10. Ethics of Discovered Art</h2>
+    <ul>
+      <li><strong>10.1</strong> Do not impose; expose.</li>
+      <li><strong>10.11</strong> Publish the rules; let dissent address the grammar.</li>
+      <li><strong>10.12</strong> Inherit scarcity; do not counterfeit it.</li>
+      <li><strong>10.13</strong> Channel agency; do not deny it.</li>
+      <li><strong>10.14</strong> If function becomes form, <code class="op">GOTO 1.14</code> and rewrite the claim as constraint.</li>
+    </ul>
+
+    <h2>11. Method</h2>
+    <ul>
+      <li><strong>11.1</strong> Define a clear ordinal→color grammar: simple to learn, strict to break.</li>
+      <li><strong>11.11</strong> Map space from sat ranges; let position bear provenance.</li>
+      <li><strong>11.12</strong> Inscribe the renderer; allow verification without trust.</li>
+      <li><strong>11.13</strong> Bind experience to links; let understanding travel at URL speed.</li>
+      <li><strong>11.14</strong> If any step depends on trust, <code class="op">RAISE</code> <code>ReliabilityError</code>; <code class="op">GOTO 3</code>.</li>
+    </ul>
+
+    <h2>12. Limits &amp; Horizons</h2>
+    <ul>
+      <li><strong>12.1</strong> What cannot be computed cannot be part of the work.</li>
+      <li><strong>12.11</strong> What can be computed but not linked is not yet shareable.</li>
+      <li><strong>12.12</strong> What is linkable but not ownable is commons; respect it.</li>
+      <li><strong>12.13</strong> If a limit offends, make it a frame; <code class="op">GOTO 17.1</code>.</li>
+    </ul>
+
+    <h2>13. Artist</h2>
+    <ul>
+      <li><strong>13.1</strong> Composes rules, selects thresholds, opens doors.</li>
+      <li><strong>13.11</strong> Curates the flow of intention through machines.</li>
+      <li><strong>13.12</strong> Becomes accountable to the medium’s message.</li>
+      <li><strong>13.13</strong> Discovers.</li>
+      <li><strong>13.14</strong> If nostalgia returns, <code class="op">GOTO 2</code>.</li>
+    </ul>
+
+    <h2>14. Artwork</h2>
+    <ul>
+      <li><strong>14.1</strong> The invariant under independent re-rendering.</li>
+      <li><strong>14.11</strong> Rules applied to ledger facts.</li>
+      <li><strong>14.12</strong> The sum of all its links.</li>
+      <li><strong>14.13</strong> The world of its necessary views.</li>
+      <li><strong>14.14</strong> If a single private file is required, <code class="op">GOTO 9</code>.</li>
+    </ul>
+
+    <h2>15. Criticism</h2>
+    <ul>
+      <li><strong>15.1</strong> Seeing replaces saying; explanation is commentary.</li>
+      <li><strong>15.11</strong> Point precisely by hash, by range, by coordinate.</li>
+      <li><strong>15.12</strong> Reveal by indexing.</li>
+      <li><strong>15.13</strong> If words outrun links, <code class="op">THROTTLE (Adjectives)</code>; <code class="op">AMPLIFY(URIs)</code>; <code class="op">RETURN</code></li>
+    </ul>
+
+    <h2>16. Museum / Gallery</h2>
+    <ul>
+      <li><strong>16.1</strong> The map replaces the room.</li>
+      <li><strong>16.11</strong> The wall label becomes the URL; the curator becomes a cartographer.</li>
+      <li><strong>16.12</strong> Exhibitions are sequences of states, not shipments of objects.</li>
+      <li><strong>16.13</strong> History is rewatchable; each replay is the same work at another time.</li>
+      <li><strong>16.14</strong> If logistics protest, <code class="op">GOTO 7</code>.</li>
+    </ul>
+
+    <h2>17. Meaning</h2>
+    <ul>
+      <li><strong>17.1</strong> Legibility under constraint.</li>
+      <li><strong>17.11</strong> Rule-bound surprise.</li>
+      <li><strong>17.12</strong> The sense of inevitability when pattern meets provenance.</li>
+      <li><strong>17.13</strong> Unforced coherence.</li>
+      <li><strong>17.14</strong> If meaning is declared, suspect it; if meaning emerges, admit it. <code class="op">RETURN</code>.</li>
+    </ul>
+
+    <h2>18. Final Loop (which is first)</h2>
+    <ul>
+      <li><strong>18.1</strong> Bitcoin’s “other side” is human intent rendered as image.</li>
+      <li><strong>18.11</strong> Mosaic does not paint on the chain; it reveals its visual side.</li>
+      <li><strong>18.12</strong> Pictures are not minted; coordinates are discovered.</li>
+      <li><strong>18.13</strong> What is shown was already written.</li>
+      <li><strong>18.14</strong> <code class="op">GOTO 1</code> <em>(endless)</em>.</li>
+    </ul>
+  </div>
+</body>
+</html>
